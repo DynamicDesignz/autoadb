@@ -1,0 +1,45 @@
+echo "Moto e4 Root"
+
+echo "Connect USB To Phone With USB Debugging, File Transfer."
+echo "Reboot Moto e4 into boot mode using volume down and power at same time, then select reboot bootloader from screen menu"
+echo "ENTERED FASTBOOT MODE!"
+
+adb reboot bootloader
+fastboot devices
+
+fastboot oem get_unlock_data
+
+chrome https://accounts.motorola.com/ssoauth/login;jsessionid=134705roct8i13l719objoyxn?TARGET=https://motorola-global-portal.custhelp.com/cc/cas/sso/redirect/standalone/bootloader/unlock-your-device-b#
+
+echo "Enter OEM Unlock Code String Into Site..."
+
+echo "Copy Request Unlock Key From Site Email!"
+
+echo "ENTER KEY AFTER - fastboot oem unlock "
+sleep 2
+fastboot oem unlock 
+
+echo "BOOTLOADER IS NOW UNLOCKED!!!"
+
+
+adb reboot bootloader
+
+fastboot devices
+
+
+echo "WARNING: DOING FLASH RECOVERY DO NOT REMOVE USB!"
+fastboot flash recovery recovery.img
+
+echo "FLASHING TWRP RECOVERY!"
+fastboot boot recovery.img
+
+echo "Entering TWRP Recovery Mode..."
+
+echo "1.GO TO WIPE OPTION, TAP FORMAT DATA - YES, - COPY MAGISK.ZIP AND SUPER SU ON TO INTERNAL STORAGE"
+echo "2.NOW WIPE CACHE PARTITION DALVIK CACHE PARTITION AND REBOOT PHONE!"
+
+adb rm - r /data/dalvik-cache
+adb rm - r /cache/dalvik-cache
+
+echo "MOTO E4 ROOTED SUCCESS!!!"
+done
